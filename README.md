@@ -4,14 +4,12 @@
 
 **SpawnDev.BlazorJS.SimplePeer** brings the amazing [SimplePeer](https://github.com/feross/simple-peer) library to Blazor WebAssembly.
 
-[SimplePeer](https://github.com/feross/simple-peer) Simple WebRTC video, voice, and data channels
+**SpawnDev.BlazorJS.SimplePeer** uses [SpawnDev.BlazorJS](https://github.com/LostBeard/SpawnDev.BlazorJS) for Javascript interop allowing strongly typed, full usage of the [SimplePeer](https://github.com/feross/simple-peer) Javascript library. Voice, video and data channels are all fully supported in Blazor WebAssembly.
 
 ### Demo
 [Live Demo](https://lostbeard.github.io/SpawnDev.BlazorJS.SimplePeer/)
 
 ### Getting started
-
-SpawnDev.BlazorJS.SimplePeer uses [SpawnDev.BlazorJS](https://github.com/LostBeard/SpawnDev.BlazorJS) for Javascript interop.
 
 Example Program.cs 
 ```cs
