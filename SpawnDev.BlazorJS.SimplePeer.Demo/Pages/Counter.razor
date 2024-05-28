@@ -45,7 +45,7 @@
     {
         var document = JS.Get<Document>("document");
         var location = new Uri(NavigationManager.Uri);
-        var config = new SimplePeerConfig
+        var config = new SimplePeerOptions
             {
                 Initiator = location.Fragment == "#1",
                 Trickle = false
