@@ -1,0 +1,83 @@
+﻿@page "/counter"
+@using SpawnDev.BlazorJS.JSObjects;
+@using System.Text.Json;
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<style>
+    #outgoing {
+        width: 600px;
+        word-wrap: break-word;
+        white-space: normal;
+    }
+</style>
+<form>
+    <textarea id="incoming"></textarea>
+    <button type="submit">submit</button>
+</form>
+<pre id="outgoing"></pre>
+
+@code {
+    [Inject] BlazorJSRuntime JS { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Init();
+        }
+    }
+
+    void Init()
+    {
+        var document = JS.Get<Document>("document");
+        var location = new Uri(NavigationManager.Uri);
+        var config = new SimplePeerConfig
+            {
+                Initiator = location.Fragment == "#1",
+                Trickle = false
+            };
+        JS.Log("config", config);
+        var p = new SimplePeer(config);
+
+        p.On<JSObject>("error", err => JS.Log("error", err));
+
+        p.On<JSObject>("signal", data =>
+        {
+            JS.Log("SIGNAL", JSON.Stringify(data));
+            document.QuerySelector("#outgoing")!.TextContent = JSON.Stringify(data);
+        });
+
+        document.QuerySelector("form")!.AddEventListener<Event>("submit", ev =>
+        {
+            ev.PreventDefault();
+            var json = document.QuerySelector<HTMLInputElement>("#incoming")!.Value;
+            p.Signal(JSON.Parse(json)!);
+        });
+
+        p.On("connect", () =>
+        {
+            JS.Log("CONNECT");
+            p.Send("whatever" + Guid.NewGuid().ToString());
+        });
+
+        p.On<string>("data", data =>
+        {
+            JS.Log("data:", data);
+
+        });
+    }
+}
