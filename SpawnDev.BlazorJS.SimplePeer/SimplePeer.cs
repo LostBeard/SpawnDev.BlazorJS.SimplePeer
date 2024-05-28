@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JSObjects.WebRTC;
 
 namespace SpawnDev.BlazorJS.SimplePeer
 {
@@ -35,7 +36,73 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// </summary>
         public SimplePeer() : base(JS.New(nameof(SimplePeer))) { }
         #endregion
+        #region Properties
+        /// <summary>
+        /// Set to true if this is the initiating peer
+        /// </summary>
+        public bool Initiator => JSRef!.Get<bool>("initiator");
+        /// <summary>
+        /// Set to false to disable trickle ICE and get a single 'signal' event (slower)
+        /// </summary>
+        public bool Trickle => JSRef!.Get<bool>("trickle");
+        /// <summary>
+        /// Custom webrtc data channel configuration (used by createDataChannel)
+        /// </summary>
+        public string ChannelName => JSRef!.Get<string>("channelName");
+        /// <summary>
+        /// Custom webrtc configuration (used by RTCPeerConnection constructor)
+        /// </summary>
+        public RTCConfiguration? Config => JSRef!.Get<RTCConfiguration?>("config");
+        /// <summary>
+        /// Custom webrtc data channel configuration (used by createDataChannel)
+        /// </summary>
+        public RTCDataChannelOptions? ChannelConfig => JSRef!.Get<RTCDataChannelOptions?>("channelConfig");
+        /// <summary>
+        /// Custom offer options (used by createOffer method)
+        /// </summary>
+        public RTCOfferOptions? OfferOptions => JSRef!.Get<RTCOfferOptions?>("offerOptions");
+        /// <summary>
+        /// Custom answer options (used by createAnswer method)
+        /// </summary>
+        public RTCAnswerOptions? AnswerOptions => JSRef!.Get<RTCAnswerOptions?>("answerOptions");
+        /// <summary>
+        /// An array of MediaStreams returned from getUserMedia
+        /// </summary>
+        public Array<MediaStream> Streams => JSRef!.Get<Array<MediaStream>>("streams");
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Writable => JSRef!.Get<bool>("writable");
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Readable => JSRef!.Get<bool>("readable");
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AllowHalfOpen => JSRef!.Get<bool>("allowHalfOpen");
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Destroying => JSRef!.Get<bool>("destroying");
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Destroyed => JSRef!.Get<bool>("destroyed");
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AllowHalfTrickle => JSRef!.Get<bool>("allowHalfTrickle");
+        /// <summary>
+        /// 
+        /// </summary>
+        public int IceCompleteTimeout => JSRef!.Get<int>("iceCompleteTimeout");
+        #endregion
         #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Destroy() => JSRef!.CallVoid("destroy");
         /// <summary>
         /// Call this method whenever the remote peer emits a peer.on('signal') event.<br/>
         /// The data will encapsulate a webrtc offer, answer, or ice candidate. These messages help the peers to eventually establish a direct connection to each other. The contents of these strings are an implementation detail that can be ignored by the user of this module; simply pass the data from 'signal' events to the remote peer and call peer.signal(data) to get connected.

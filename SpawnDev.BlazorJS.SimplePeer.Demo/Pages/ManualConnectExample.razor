@@ -1,5 +1,6 @@
 ﻿@page "/ManualConnectExample"
 @using SpawnDev.BlazorJS.JSObjects;
+@using System.Text;
 @using System.Text.Json;
 
 <PageTitle>Counter</PageTitle>
@@ -7,10 +8,11 @@
 <h1>SimplePeer Test</h1>
 
 <p>
-    This test lets you manually connect two peers. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#usage">Original Example</a>
+    This test lets you manually connect two peers. This example is meant to mirror the original. Some standard Blazor usage styles or ignored to keep the examples closer. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#usage">Original Example</a>
 </p>
 
 <div>
+    Role: @PeerRole<br/>
     <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(true))">Create Initiator</button>
     <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(false))">Create Receiver</button>
 </div>
@@ -31,19 +33,19 @@
 @code {
     [Inject] BlazorJSRuntime JS { get; set; }
 
-    bool? Initiator = null;
+    string PeerRole = "(select)";
     SimplePeer? peer = null;
 
     void Init(bool initiator)
     {
+        PeerRole = initiator ? "initiator" : "receiver";
         var document = JS.Get<Document>("document");
-        var config = new SimplePeerOptions
+        peer = new SimplePeer(new SimplePeerOptions
             {
                 Initiator = initiator,
-                Trickle = false
-            };
-        JS.Log("config", config);
-        peer = new SimplePeer(config);
+                Trickle = false,
+            }
+        );
 
         peer.On<JSObject>("error", err => JS.Log("error", err));
 
@@ -63,13 +65,13 @@
         peer.On("connect", () =>
         {
             JS.Log("CONNECT");
-            peer.Send("whatever" + Guid.NewGuid().ToString());
+            peer.Send("Hello " + Guid.NewGuid().ToString());
         });
 
-        peer.On<Uint8Array>("data", data =>
+        peer.On<NodeBuffer>("data", data =>
         {
             JS.Log("data:", data);
-
+            document.QuerySelector("#outgoing")!.TextContent = Encoding.UTF8.GetString((byte[])data!);
         });
     }
 }
