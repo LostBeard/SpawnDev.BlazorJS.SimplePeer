@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpawnDev.BlazorJS.SimplePeer
 {
@@ -113,14 +114,26 @@ namespace SpawnDev.BlazorJS.SimplePeer
         public JSEventCallback OnConnect { get => new JSEventCallback("connect", On, RemoveListener); set { } }
         /// <summary>
         /// Received a message from the remote peer (via the data channel).<br/>
-        /// 
+        /// data will be either a String or a Buffer/Uint8Array (see buffer).
         /// </summary>
         public JSEventCallback<JSObject> OnData { get => new JSEventCallback<JSObject>("data", On, RemoveListener); set { } }
         /// <summary>
         /// Received a remote video stream, which can be displayed in a video tag.
         /// </summary>
         public JSEventCallback<MediaStream> OnStream { get => new JSEventCallback<MediaStream>("stream", On, RemoveListener); set { } }
-
+        /// <summary>
+        /// Received a remote audio/video track. Streams may contain multiple tracks.
+        /// </summary>
+        public JSEventCallback<MediaStreamTrack, MediaStream> OnTrack{ get => new JSEventCallback<MediaStreamTrack, MediaStream>("track", On, RemoveListener); set { } }
+        /// <summary>
+        /// Called when the peer connection has closed.
+        /// </summary>
+        public JSEventCallback OnClose { get => new JSEventCallback("close", On, RemoveListener); set { } }
+        /// <summary>
+        /// Fired when a fatal error occurs. Usually, this means bad signaling data was received from the remote peer.<br/>
+        /// Errors returned by the error event have an err.code property that will indicate the origin of the failure.<br/>
+        /// </summary>
+        public JSEventCallback<JSObject> OnError { get => new JSEventCallback<JSObject>("error", On, RemoveListener); set { } }
         #endregion
     }
 }
