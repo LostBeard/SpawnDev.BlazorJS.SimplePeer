@@ -12,7 +12,7 @@
 </p>
 
 <div>
-    Role: @PeerRole<br/>
+    Role: @PeerRole<br />
     <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(true))">Create Initiator</button>
     <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(false))">Create Receiver</button>
 </div>
@@ -36,7 +36,7 @@
     string PeerRole = "(select)";
     SimplePeer? peer = null;
 
-    void Init(bool initiator)
+    async Task Init(bool initiator)
     {
         PeerRole = initiator ? "initiator" : "receiver";
         var document = JS.Get<Document>("document");
