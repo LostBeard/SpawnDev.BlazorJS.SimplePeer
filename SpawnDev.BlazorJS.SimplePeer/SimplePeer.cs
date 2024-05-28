@@ -86,7 +86,7 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// </summary>
         public bool Destroying => JSRef!.Get<bool>("destroying");
         /// <summary>
-        /// 
+        /// The instance has been destroyed
         /// </summary>
         public bool Destroyed => JSRef!.Get<bool>("destroyed");
         /// <summary>
@@ -100,6 +100,7 @@ namespace SpawnDev.BlazorJS.SimplePeer
         #endregion
         #region Methods
         /// <summary>
+        /// Destroy and cleanup this peer connection.<br/>
         /// 
         /// </summary>
         public void Destroy() => JSRef!.CallVoid("destroy");
