@@ -1,14 +1,19 @@
-﻿@page "/counter"
+﻿@page "/ManualConnectExample"
 @using SpawnDev.BlazorJS.JSObjects;
 @using System.Text.Json;
 
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+<h1>SimplePeer Test</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p>
+    This test lets you manually connect two peers. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#usage">Original Example</a>
+</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<div>
+    <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(true))">Create Initiator</button>
+    <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(false))">Create Receiver</button>
+</div>
 
 <style>
     #outgoing {
@@ -19,43 +24,30 @@
 </style>
 <form>
     <textarea id="incoming"></textarea>
-    <button type="submit">submit</button>
+    <button disabled="@(peer == null)" type="submit">submit</button>
 </form>
 <pre id="outgoing"></pre>
 
 @code {
     [Inject] BlazorJSRuntime JS { get; set; }
-    [Inject] NavigationManager NavigationManager { get; set; }
-    private int currentCount = 0;
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+    bool? Initiator = null;
+    SimplePeer? peer = null;
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            Init();
-        }
-    }
-
-    void Init()
+    void Init(bool initiator)
     {
         var document = JS.Get<Document>("document");
-        var location = new Uri(NavigationManager.Uri);
         var config = new SimplePeerOptions
             {
-                Initiator = location.Fragment == "#1",
+                Initiator = initiator,
                 Trickle = false
             };
         JS.Log("config", config);
-        var p = new SimplePeer(config);
+        peer = new SimplePeer(config);
 
-        p.On<JSObject>("error", err => JS.Log("error", err));
+        peer.On<JSObject>("error", err => JS.Log("error", err));
 
-        p.On<JSObject>("signal", data =>
+        peer.On<JSObject>("signal", data =>
         {
             JS.Log("SIGNAL", JSON.Stringify(data));
             document.QuerySelector("#outgoing")!.TextContent = JSON.Stringify(data);
@@ -65,16 +57,16 @@
         {
             ev.PreventDefault();
             var json = document.QuerySelector<HTMLInputElement>("#incoming")!.Value;
-            p.Signal(JSON.Parse(json)!);
+            peer.Signal(JSON.Parse(json)!);
         });
 
-        p.On("connect", () =>
+        peer.On("connect", () =>
         {
             JS.Log("CONNECT");
-            p.Send("whatever" + Guid.NewGuid().ToString());
+            peer.Send("whatever" + Guid.NewGuid().ToString());
         });
 
-        p.On<string>("data", data =>
+        peer.On<Uint8Array>("data", data =>
         {
             JS.Log("data:", data);
 

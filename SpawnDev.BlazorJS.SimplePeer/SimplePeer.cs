@@ -1,11 +1,5 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpawnDev.BlazorJS.SimplePeer
 {
@@ -16,11 +10,16 @@ namespace SpawnDev.BlazorJS.SimplePeer
     public class SimplePeer : EventEmitter
     {
         static Task? _Init = null;
+        /// <summary>
+        /// Load the SimplePeer Javascript library
+        /// </summary>
+        /// <returns>Returns when the library has been loaded</returns>
         public static Task Init()
         {
             _Init ??= JS.LoadScript("_content/SpawnDev.BlazorJS.SimplePeer/simplepeer.min.js");
             return _Init;
         }
+        #region Constructors
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -35,6 +34,8 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// Create a new WebRTC peer connection.
         /// </summary>
         public SimplePeer() : base(JS.New(nameof(SimplePeer))) { }
+        #endregion
+        #region Methods
         /// <summary>
         /// Call this method whenever the remote peer emits a peer.on('signal') event.<br/>
         /// The data will encapsulate a webrtc offer, answer, or ice candidate. These messages help the peers to eventually establish a direct connection to each other. The contents of these strings are an implementation detail that can be ignored by the user of this module; simply pass the data from 'signal' events to the remote peer and call peer.signal(data) to get connected.
@@ -100,7 +101,7 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// <param name="newTrack"></param>
         /// <param name="stream"></param>
         public void ReplaceTrack(MediaStreamTrack oldTrack, MediaStreamTrack newTrack, MediaStream stream) => JSRef!.CallVoid("replaceTrack", oldTrack, newTrack, stream);
-
+        #endregion
         #region Events
         /// <summary>
         /// Fired when the peer wants to send signaling data to the remote peer.<br/>
