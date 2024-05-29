@@ -33,7 +33,7 @@ await SimplePeer.Init();
 await builder.Build().BlazorJSRunAsync();
 ```
 
-ManualConnectExample.razor
+ManualConnectExample.razor  
 Modified version of this [SimplePer usage example](https://github.com/feross/simple-peer?tab=readme-ov-file#usage)
 ```cs
 @page "/ManualConnectExample"
