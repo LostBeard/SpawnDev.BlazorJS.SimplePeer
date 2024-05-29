@@ -33,7 +33,7 @@ await SimplePeer.Init();
 await builder.Build().BlazorJSRunAsync();
 ```
 
-ManualConnectExample.razor  
+ManualConnectExample.razor
 Modified version of this [SimplePer usage example](https://github.com/feross/simple-peer?tab=readme-ov-file#usage)
 ```cs
 @page "/ManualConnectExample"
@@ -42,7 +42,7 @@ Modified version of this [SimplePer usage example](https://github.com/feross/sim
 @using System.Text.Json;
 @implements IDisposable
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>SimplePeer Test</PageTitle>
 
 <h1>SimplePeer Test</h1>
 
