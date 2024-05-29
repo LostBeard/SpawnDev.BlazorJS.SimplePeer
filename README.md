@@ -2,9 +2,9 @@
 
 [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.SimplePeer.svg?label=SpawnDev.BlazorJS.SimplePeer)](https://www.nuget.org/packages/SpawnDev.BlazorJS.SimplePeer)
 
-**SpawnDev.BlazorJS.SimplePeer** brings the amazing [SimplePeer](https://github.com/feross/simple-peer) library to Blazor WebAssembly.
+**SpawnDev.BlazorJS.SimplePeer** brings the amazing [simple-peer](https://github.com/feross/simple-peer) library to Blazor WebAssembly.
 
-**SpawnDev.BlazorJS.SimplePeer** uses [SpawnDev.BlazorJS](https://github.com/LostBeard/SpawnDev.BlazorJS) for Javascript interop allowing strongly typed, full usage of the [SimplePeer](https://github.com/feross/simple-peer) Javascript library. Voice, video and data channels are all fully supported in Blazor WebAssembly. The **SpawnDev.BlazorJS.SimplePeer** API is a strongly typed version of the API found on the [SimplePeer](https://github.com/feross/simple-peer?tab=readme-ov-file#api) repo. 
+**SpawnDev.BlazorJS.SimplePeer** uses [SpawnDev.BlazorJS](https://github.com/LostBeard/SpawnDev.BlazorJS) for Javascript interop allowing strongly typed, full usage of the [simple-peer](https://github.com/feross/simple-peer) Javascript library. Voice, video and data channels are all fully supported in Blazor WebAssembly. The **SpawnDev.BlazorJS.SimplePeer** API is a strongly typed version of the API found on the [simple-peer](https://github.com/feross/simple-peer?tab=readme-ov-file#api) repo. 
 
 ### Demo
 [Simple Demo](https://lostbeard.github.io/SpawnDev.BlazorJS.SimplePeer/)
