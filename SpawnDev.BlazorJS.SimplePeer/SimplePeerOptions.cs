@@ -56,7 +56,9 @@ namespace SpawnDev.BlazorJS.SimplePeer
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public MediaStream[]? Streams { get; set; }
         /// <summary>
-        /// Set to true to create the stream in Object Mode. In this mode, incoming string data is not automatically converted to Buffer objects.
+        /// Set to true to create the stream in Object Mode. In this mode, incoming string data is not automatically converted to Buffer objects.<br/>
+        /// false - incoming string data is automatically converted to NodeBuffer objects. Default if omitted.<br/>
+        /// true - incoming string data is not automatically converted to NodeBuffer objects. Incoming data will be received as string or NodeBuffer depending on how it was sent.<br/>
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ObjectMode { get; set; }

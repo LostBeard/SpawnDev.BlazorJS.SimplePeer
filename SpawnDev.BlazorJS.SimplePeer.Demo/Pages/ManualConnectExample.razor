@@ -2,13 +2,14 @@
 @using SpawnDev.BlazorJS.JSObjects;
 @using System.Text;
 @using System.Text.Json;
+@implements IDisposable
 
 <PageTitle>Counter</PageTitle>
 
 <h1>SimplePeer Test</h1>
 
 <p>
-    This test lets you manually connect two peers. This example is meant to mirror the original. Some standard Blazor usage styles or ignored to keep the examples closer. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#usage">Original Example</a>
+    This test lets you manually connect two peers. This example is meant to mirror the original. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#usage">Original Example</a>
 </p>
 
 <div>
@@ -17,29 +18,23 @@
     <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(false))">Create Receiver</button>
 </div>
 
-<style>
-    #outgoing {
-        width: 600px;
-        word-wrap: break-word;
-        white-space: normal;
-    }
-</style>
-<form>
-    <textarea id="incoming"></textarea>
-    <button disabled="@(peer == null)" type="submit">submit</button>
-</form>
-<pre id="outgoing"></pre>
+<div>
+    <textarea style="width: 600px; word-wrap: break-word; white-space: normal;" @bind=@incoming></textarea>
+    <button disabled="@(peer == null)" @onclick=@Submit>submit</button>
+</div>
+<pre style="width: 600px; word-wrap: break-word; white-space: normal;">@outgoing</pre>
 
 @code {
     [Inject] BlazorJSRuntime JS { get; set; }
 
-    string PeerRole = "(select)";
+    string PeerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
     SimplePeer? peer = null;
+    Document? document = null;
+    string outgoing = "";
+    string incoming = "";
 
-    async Task Init(bool initiator)
+    void Init(bool initiator)
     {
-        PeerRole = initiator ? "initiator" : "receiver";
-        var document = JS.Get<Document>("document");
         peer = new SimplePeer(new SimplePeerOptions
             {
                 Initiator = initiator,
@@ -47,31 +42,65 @@
             }
         );
 
-        peer.On<JSObject>("error", err => JS.Log("error", err));
+        peer.OnError += SimplePeer_OnError;
+        peer.OnSignal += SimplePeer_OnSignal;
+        peer.OnConnect += SimplePeer_OnConnect;
+        peer.OnClose += SimplePeer_OnClose;
+        peer.OnData += SimplePeer_OnData;
+    }
 
-        peer.On<JSObject>("signal", data =>
-        {
-            JS.Log("SIGNAL", JSON.Stringify(data));
-            document.QuerySelector("#outgoing")!.TextContent = JSON.Stringify(data);
-        });
+    void Submit()
+    {
+        peer!.Signal(JSON.Parse(incoming)!);
+    }
 
-        document.QuerySelector("form")!.AddEventListener<Event>("submit", ev =>
-        {
-            ev.PreventDefault();
-            var json = document.QuerySelector<HTMLInputElement>("#incoming")!.Value;
-            peer.Signal(JSON.Parse(json)!);
-        });
+    void SimplePeer_OnConnect()
+    {
+        JS.Log("CONNECT");
+        peer!.Send("Hello " + Guid.NewGuid().ToString());
+    }
 
-        peer.On("connect", () =>
-        {
-            JS.Log("CONNECT");
-            peer.Send("Hello " + Guid.NewGuid().ToString());
-        });
+    void SimplePeer_OnClose()
+    {
+        JS.Log("CLOSE");
+    }
 
-        peer.On<NodeBuffer>("data", data =>
+    void SimplePeer_OnSignal(JSObject data)
+    {
+        JS.Log("SIGNAL", JSON.Stringify(data));
+        outgoing = JSON.Stringify(data);
+        StateHasChanged();
+    }
+
+    void SimplePeer_OnError(NodeError error)
+    {
+        outgoing = error.Code!;
+        StateHasChanged();
+    }
+
+    void SimplePeer_OnData(NodeBuffer data)
+    {
+        outgoing = Encoding.UTF8.GetString((byte[])data!);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (peer != null)
         {
-            JS.Log("data:", data);
-            document.QuerySelector("#outgoing")!.TextContent = Encoding.UTF8.GetString((byte[])data!);
-        });
+            peer.OnError -= SimplePeer_OnError;
+            peer.OnSignal -= SimplePeer_OnSignal;
+            peer.OnConnect -= SimplePeer_OnConnect;
+            peer.OnClose -= SimplePeer_OnClose;
+            peer.OnData -= SimplePeer_OnData;
+            peer.Destroy();
+            peer.Dispose();
+            peer = null;
+        }
+        if (document != null)
+        {
+            document.Dispose(); 
+            document = null;
+        }
     }
 }

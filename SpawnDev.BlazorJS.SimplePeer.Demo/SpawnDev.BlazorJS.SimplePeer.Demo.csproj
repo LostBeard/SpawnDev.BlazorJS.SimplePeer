@@ -11,7 +11,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.5" PrivateAssets="all" />
-		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.102" />
+		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.103" />
 	</ItemGroup>
 
 	<ItemGroup>

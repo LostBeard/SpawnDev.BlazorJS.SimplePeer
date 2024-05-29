@@ -4,14 +4,14 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>1.0.0</Version>
+		<Version>1.0.1-alpha1</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
 		<DebugType>Embedded</DebugType>
 		<Title>SpawnDev.BlazorJS.SimplePeer</Title>
 		<Authors>LostBeard</Authors>
-		<Description>SimplePeer for Blazor WebAssembly</Description>
+		<Description>SimplePeer WebRTC video, voice, and data channels for Blazor WebAssembly</Description>
 		<PackageProjectUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.SimplePeer</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -28,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.102" />
+		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.103" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
