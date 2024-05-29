@@ -4,7 +4,7 @@
 
 **SpawnDev.BlazorJS.SimplePeer** brings the amazing [simple-peer](https://github.com/feross/simple-peer) library to Blazor WebAssembly.
 
-**SpawnDev.BlazorJS.SimplePeer** uses [SpawnDev.BlazorJS](https://github.com/LostBeard/SpawnDev.BlazorJS) for Javascript interop allowing strongly typed, full usage of the [simple-peer](https://github.com/feross/simple-peer) Javascript library. Voice, video and data channels are all fully supported in Blazor WebAssembly. The **SpawnDev.BlazorJS.SimplePeer** API is a strongly typed version of the API found on the [simple-peer](https://github.com/feross/simple-peer?tab=readme-ov-file#api) repo. 
+**SpawnDev.BlazorJS.SimplePeer** uses [SpawnDev.BlazorJS](https://github.com/LostBeard/SpawnDev.BlazorJS) for Javascript interop allowing strongly typed, full usage of the [simple-peer](https://github.com/feross/simple-peer) Javascript library. Voice, video and data channels are all fully supported in Blazor WebAssembly. The **SpawnDev.BlazorJS.SimplePeer** API is a strongly typed version of the API found at the [simple-peer](https://github.com/feross/simple-peer?tab=readme-ov-file#api) repo. 
 
 ### Demo
 [Simple Demo](https://lostbeard.github.io/SpawnDev.BlazorJS.SimplePeer/)
@@ -27,9 +27,9 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 // Add SpawnDev.BlazorJS interop
 builder.Services.AddBlazorJSRuntime();
-// Load the SimplePeer Javascript library. Can be called in a component instead if desired.
+// Load the SimplePeer Javascript library. Can be called in a component instead if desired, or loaded using a <script> tag in the index.html
 await SimplePeer.Init();
-// Run app using BlazorJSRunAsync extension
+// Run app using BlazorJSRunAsync extension method
 await builder.Build().BlazorJSRunAsync();
 ```
 
