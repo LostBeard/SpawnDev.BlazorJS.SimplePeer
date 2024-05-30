@@ -58,6 +58,9 @@
         peer.OnConnect += SimplePeer_OnConnect;
         peer.OnClose += SimplePeer_OnClose;
         peer.OnData += SimplePeer_OnData;
+
+        // sets _peer global var for debugging in dev tools
+        JS.Set("_peer", peer);
     }
 
     void Submit()
