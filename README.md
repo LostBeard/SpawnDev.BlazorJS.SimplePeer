@@ -67,8 +67,6 @@ Modified version of this [SimplePer usage example](https://github.com/feross/sim
 <pre style="width: 600px; word-wrap: break-word; white-space: normal;">@((MarkupString)outgoing)</pre>
 
 @code {
-    [Inject] BlazorJSRuntime JS { get; set; }
-
     string peerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
     SimplePeer? peer = null;
     string outgoing = "";
@@ -95,7 +93,6 @@ Modified version of this [SimplePer usage example](https://github.com/feross/sim
 
     void SimplePeer_OnConnect()
     {
-        JS.Log("CONNECT");
         outgoing = "Connected<br/>";
         StateHasChanged();
         // send string
@@ -106,14 +103,12 @@ Modified version of this [SimplePer usage example](https://github.com/feross/sim
 
     void SimplePeer_OnClose()
     {
-        JS.Log("CLOSE");
         outgoing += "Closed<br/>";
         StateHasChanged();
     }
 
     void SimplePeer_OnSignal(JSObject data)
     {
-        JS.Log("SIGNAL", JSON.Stringify(data));
         outgoing = JSON.Stringify(data);
         StateHasChanged();
     }
