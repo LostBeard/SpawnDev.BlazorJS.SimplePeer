@@ -69,11 +69,6 @@
         peer!.Signal(JSON.Parse(incoming)!);
     }
 
-    class Fruit
-    {
-        public string Name { get; set; }
-    }
-
     void SimplePeer_OnConnect()
     {
         JS.Log("CONNECT");
