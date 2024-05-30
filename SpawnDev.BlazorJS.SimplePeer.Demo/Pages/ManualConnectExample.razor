@@ -16,7 +16,7 @@
 </p>
 
 <div>
-    Role: @PeerRole<br />
+    Role: @peerRole<br />
     <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(true))">Create Initiator</button>
     <button disabled="@(peer != null)" class="btn btn-primary" @onclick="@(()=>Init(false))">Create Receiver</button>
 </div>
@@ -30,7 +30,7 @@
 @code {
     [Inject] BlazorJSRuntime JS { get; set; }
 
-    string PeerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
+    string peerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
     SimplePeer? peer = null;
     string outgoing = "";
     string incoming = "";
