@@ -69,7 +69,6 @@ hit submit. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#us
 
     string PeerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
     SimplePeer? peer = null;
-    Document? document = null;
     string outgoing = "";
     string incoming = "";
 
@@ -136,11 +135,6 @@ hit submit. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#us
             peer.Destroy();
             peer.Dispose();
             peer = null;
-        }
-        if (document != null)
-        {
-            document.Dispose(); 
-            document = null;
         }
     }
 }

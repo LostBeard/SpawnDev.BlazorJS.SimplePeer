@@ -32,7 +32,6 @@
 
     string PeerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
     SimplePeer? peer = null;
-    Document? document = null;
     string outgoing = "";
     string incoming = "";
 
@@ -135,11 +134,6 @@
             peer.Destroy();
             peer.Dispose();
             peer = null;
-        }
-        if (document != null)
-        {
-            document.Dispose();
-            document = null;
         }
     }
 }
