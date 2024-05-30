@@ -34,7 +34,7 @@ await builder.Build().BlazorJSRunAsync();
 ```
 
 ManualConnectExample.razor  
-Modified version of this [SimplePer usage example](https://github.com/feross/simple-peer?tab=readme-ov-file#usage)  
+Blazor version of: [SimplePer usage example](https://github.com/feross/simple-peer?tab=readme-ov-file#usage)  
 ```cs
 @page "/"
 @using System.Text;
