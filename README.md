@@ -75,21 +75,11 @@ Modified version of this [SimplePer usage example](https://github.com/feross/sim
 
     void Init(bool initiator)
     {
-        var peerOptions = new SimplePeerOptions
+        peer = new SimplePeer(new SimplePeerOptions
             {
                 Initiator = initiator,
                 Trickle = false,
-                ObjectMode = false,
-                Config = new RTCConfiguration
-                {
-                    IceServers = new RTCIceServer[]
-                                            {
-                        new RTCIceServer { Urls = "stun:stun.l.google.com:19302" },
-                        new RTCIceServer { Urls = "stun:global.stun.twilio.com:3478" },
-                                            }
-                }
-            };
-        peer = new SimplePeer(peerOptions);
+            });
         peer.OnError += SimplePeer_OnError;
         peer.OnSignal += SimplePeer_OnSignal;
         peer.OnConnect += SimplePeer_OnConnect;
