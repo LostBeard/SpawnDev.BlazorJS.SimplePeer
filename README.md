@@ -29,7 +29,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Add SpawnDev.BlazorJS interop
 builder.Services.AddBlazorJSRuntime();
 
-// Load the SimplePeer Javascript library. Can be called in a component instead if desired, or loaded using a <script> tag in the index.html
+// Load the SimplePeer Javascript library. 
+// Can be called in a component instead if desired, or loaded using a <script> tag in the index.html
 await SimplePeer.Init();
 
 // Run app using BlazorJSRunAsync extension method
