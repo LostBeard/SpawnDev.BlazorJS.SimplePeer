@@ -125,21 +125,7 @@ Modified version of this [SimplePer usage example](https://github.com/feross/sim
     
     void SimplePeer_OnData(NodeBuffer data)
     {
-        var dataType = data.JSRef!.GetConstructorName();
-        JS.Log($"data type: {dataType}");
-        switch (dataType)
-        {
-            case "String":
-                // data is actually a string. read in as a string.
-                // data will only be received as a string if peerOptions.ObjectMode = true
-                outgoing += "String: " + data.JSRef!.As<string>() + "<br/>";
-                break;
-            default:
-                // default is NodeBuffer (due to WebPack it may have had its class name mangled)
-                // if peerOptions.ObjectMode = false (default) data will always be a NodeBuffer
-                outgoing += "Binary: " + Encoding.UTF8.GetString((byte[])data!) + "<br/>";
-                break;
-        }
+        outgoing += "Binary: " + Encoding.UTF8.GetString((byte[])data!) + "<br/>";
         StateHasChanged();
     }
 
