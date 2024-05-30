@@ -37,9 +37,10 @@ ManualConnectExample.razor
 Modified version of this [SimplePer usage example](https://github.com/feross/simple-peer?tab=readme-ov-file#usage)  
 ```cs
 @page "/"
-@using SpawnDev.BlazorJS.JSObjects;
 @using System.Text;
 @using System.Text.Json;
+@using SpawnDev.BlazorJS;
+@using SpawnDev.BlazorJS.JSObjects;
 @using SpawnDev.BlazorJS.JSObjects.WebRTC;
 @implements IDisposable
 
