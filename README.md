@@ -14,7 +14,7 @@
 Add the Nuget package `SpawnDev.BlazorJS.SimplePeer` to your project using your package manager of choice.
 
 Modify the Blazor WASM `Program.cs` to initialize SpawnDev.BlazorJS for Javascript interop.  
-Example Program.cs 
+Example Program.cs   
 ```cs
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
