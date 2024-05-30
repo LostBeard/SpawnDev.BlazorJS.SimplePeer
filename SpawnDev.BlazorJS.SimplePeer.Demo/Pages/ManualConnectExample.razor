@@ -52,16 +52,12 @@
                                             }
                 }
             };
-        JS.Set("_peerOptions", peerOptions);
-
         peer = new SimplePeer(peerOptions);
         peer.OnError += SimplePeer_OnError;
         peer.OnSignal += SimplePeer_OnSignal;
         peer.OnConnect += SimplePeer_OnConnect;
         peer.OnClose += SimplePeer_OnClose;
         peer.OnData += SimplePeer_OnData;
-
-        JS.Set("_peer", peer);
     }
 
     void Submit()
@@ -97,7 +93,7 @@
         outgoing = error.Code!;
         StateHasChanged();
     }
-    int i = 0;
+    
     void SimplePeer_OnData(NodeBuffer data)
     {
         var dataType = data.JSRef!.GetConstructorName();
