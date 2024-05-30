@@ -192,6 +192,8 @@ The SimplePeerOptions properties do the following:
 - `Trickle` - `bool` set to `false` to disable [trickle ICE](http://webrtchacks.com/trickle-ice/) and get a single 'signal' event (slower)
 - `ObjectMode` - `bool` set to `true` to create the stream in [Object Mode](https://nodejs.org/api/stream.html#stream_object_mode). In this mode, incoming string data is not automatically converted to `NodeBuffer` objects.
 
+## Methods
+
 ### `peer.Signal(object data)`
 
 Call this method whenever the remote peer emits a `peer.OnSignal` event.
@@ -255,7 +257,7 @@ if (SimplePeer.WEBRTC_SUPPORT) {
 
 ## Events
 
-**Note:** Registered event handlers need to be unregistered when they are no longer needed to prevent memory leaks. Lambda event handlers are used here to keep the examples simple.
+**Note:** Registered event handlers need to be unregistered (`-=` or `RemoveListener`) when they are no longer needed to prevent memory leaks. Lambda event handlers are used here to keep the examples simple.
 
 `SimplePeer` inherits from `EventEmitter`. Event handlers can be added using `JSEventCallback` and `+=/-=` operators or using `EventEmitter.On` and `EventEmitter.RemoveListener` methods.
 
