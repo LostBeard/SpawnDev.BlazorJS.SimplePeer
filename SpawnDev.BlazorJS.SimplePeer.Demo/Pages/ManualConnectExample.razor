@@ -2,6 +2,7 @@
 @using SpawnDev.BlazorJS.JSObjects;
 @using System.Text;
 @using System.Text.Json;
+@using SpawnDev.BlazorJS.JSObjects.WebRTC;
 @implements IDisposable
 
 <PageTitle>SimplePeer Test</PageTitle>
@@ -24,7 +25,7 @@
     <textarea style="width: 600px; word-wrap: break-word; white-space: normal;" @bind=@incoming></textarea>
     <button disabled="@(peer == null)" @onclick=@Submit>submit</button>
 </div>
-<pre style="width: 600px; word-wrap: break-word; white-space: normal;">@outgoing</pre>
+<pre style="width: 600px; word-wrap: break-word; white-space: normal;">@((MarkupString)outgoing)</pre>
 
 @code {
     [Inject] BlazorJSRuntime JS { get; set; }
@@ -37,18 +38,30 @@
 
     void Init(bool initiator)
     {
-        peer = new SimplePeer(new SimplePeerOptions
+        var peerOptions = new SimplePeerOptions
             {
                 Initiator = initiator,
                 Trickle = false,
-            }
-        );
+                ObjectMode = false,
+                Config = new RTCConfiguration
+                {
+                    IceServers = new RTCIceServer[]
+                                            {
+                        new RTCIceServer { Urls = "stun:stun.l.google.com:19302" },
+                        new RTCIceServer { Urls = "stun:global.stun.twilio.com:3478" },
+                                            }
+                }
+            };
+        JS.Set("_peerOptions", peerOptions);
 
+        peer = new SimplePeer(peerOptions);
         peer.OnError += SimplePeer_OnError;
         peer.OnSignal += SimplePeer_OnSignal;
         peer.OnConnect += SimplePeer_OnConnect;
         peer.OnClose += SimplePeer_OnClose;
         peer.OnData += SimplePeer_OnData;
+
+        JS.Set("_peer", peer);
     }
 
     void Submit()
@@ -56,10 +69,20 @@
         peer!.Signal(JSON.Parse(incoming)!);
     }
 
+    class Fruit
+    {
+        public string Name { get; set; }
+    }
+
     void SimplePeer_OnConnect()
     {
         JS.Log("CONNECT");
+        outgoing = "Connected<br/>";
+        StateHasChanged();
+        // test send string
         peer!.Send("Hello " + Guid.NewGuid().ToString());
+        // test send byte array (binary data)
+        peer!.Send(new byte[] { 65, 66, 67, 68 });
     }
 
     void SimplePeer_OnClose()
@@ -79,10 +102,21 @@
         outgoing = error.Code!;
         StateHasChanged();
     }
-
+    int i = 0;
     void SimplePeer_OnData(NodeBuffer data)
     {
-        outgoing = Encoding.UTF8.GetString((byte[])data!);
+        var dataType = data.JSRef!.GetConstructorName();
+        JS.Log($"data type: {dataType}");
+        switch (dataType)
+        {
+            case "String":
+                outgoing += "String: " + data.JSRef!.As<string>() + "<br/>";
+                break;
+            default:
+                // default is NodeBuffer (due to WebPack it may have had its name mangled)
+                outgoing += "Binary: " + Encoding.UTF8.GetString((byte[])data!) + "<br/>";
+                break;
+        }
         StateHasChanged();
     }
 
@@ -101,7 +135,7 @@
         }
         if (document != null)
         {
-            document.Dispose(); 
+            document.Dispose();
             document = null;
         }
     }

@@ -151,3 +151,216 @@ hit submit. The receiver generates an "answer". Paste this into the initiator's 
 hit submit.
 
 Now you have a direct P2P connection between two browsers!
+
+## API
+
+### peer = new SimplePeer([SimplePeerOptions opts])
+
+
+Create a new WebRTC peer connection.
+
+A "data channel" for text/binary communication is always established, because it's cheap and often useful. For video/voice communication, pass the `stream` option.
+
+If `opts` is specified, then the default options (shown below) will be overridden.
+
+```
+{
+  Initiator: false,
+  ChannelConfig: {},
+  ChannelName: '<random string>',
+  Config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }] },
+  OfferOptions: {},
+  AnswerOptions: {},
+  Stream: false,
+  Streams: [],
+  Trickle: true,
+  AllowHalfTrickle: false,
+  ObjectMode: false
+}
+```
+
+The SimplePeerOptions properties do the following:
+
+- `Initiator` - `bool` set to `true` if this is the initiating peer
+- `ChannelConfig` - `RTCDataChannelOptions` custom webrtc data channel configuration (used by [`createDataChannel`](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/createDataChannel))
+- `ChannelName` - `string` custom webrtc data channel name
+- `Config` - `RTCConfiguration` custom webrtc configuration (used by [`RTCPeerConnection`](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection) constructor)
+- `OfferOptions` - `RTCOfferOptions` custom offer options (used by [`createOffer`](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/createOffer) method)
+- `AnswerOptions` - `RTCAnswerOptions` custom answer options (used by [`createAnswer`](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/createAnswer) method)
+- `Stream` - `MediaStream` if video/voice is desired, pass stream returned from [`getUserMedia`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)
+- `Streams` - `MediaStream[]` an array of MediaStreams returned from [`getUserMedia`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)
+- `Trickle` - `bool` set to `false` to disable [trickle ICE](http://webrtchacks.com/trickle-ice/) and get a single 'signal' event (slower)
+- `ObjectMode` - `bool` set to `true` to create the stream in [Object Mode](https://nodejs.org/api/stream.html#stream_object_mode). In this mode, incoming string data is not automatically converted to `NodeBuffer` objects.
+
+### `peer.Signal(object data)`
+
+Call this method whenever the remote peer emits a `peer.OnSignal` event.
+
+The `data` will encapsulate a webrtc offer, answer, or ice candidate. These messages help
+the peers to eventually establish a direct connection to each other. The contents of these
+messages are an implementation detail that can be ignored by the user of this module;
+simply pass the data from 'signal' events to the remote peer and call `peer.signal(data)`
+to get connected.
+
+### `peer.Send(string/TypedArray/ArrayBuffer/Blob/byte[] data)`
+
+Send text/binary data to the remote peer. `data` can be any of several types: `string`,
+`Buffer` (see [buffer](https://github.com/feross/buffer)), `TypedArray` (`Uint8Array`,
+etc.), `ArrayBuffer`, or `Blob` (in browsers that support it).
+
+Note: If this method is called before the `peer.OnConnect` event has fired, then an exception will be thrown. Use `peer.Write(data)` (which is inherited from the node.js [duplex stream](http://nodejs.org/api/stream.html) interface) if you want this data to be buffered instead.
+
+### `peer.AddStream(MediaStream stream)`
+
+Add a `MediaStream` to the connection.
+
+### `peer.RemoveStream(MediaStream stream)`
+
+Remove a `MediaStream` from the connection.
+
+### `peer.AddTrack(MediaStreamTrack track, MediaStream stream)`
+
+Add a `MediaStreamTrack` to the connection. Must also pass the `MediaStream` you want to attach it to.
+
+### `peer.RemoveTrack(MediaStreamTrack track, MediaStream stream)`
+
+Remove a `MediaStreamTrack` from the connection. Must also pass the `MediaStream` that it was attached to.
+
+### `peer.ReplaceTrack(MediaStreamTrack oldTrack, MediaStreamTrack newTrack, MediaStream stream)`
+
+Replace a `MediaStreamTrack` with another track. Must also pass the `MediaStream` that the old track was attached to.
+
+### `peer.AddTransceiver(string kind, RTCRtpTransceiverOptions init)`
+
+Add a `RTCRtpTransceiver` to the connection. Can be used to add transceivers before adding tracks. Automatically called as necessary by `AddTrack`.
+
+### `peer.Destroy([NodeError err])`
+
+Destroy and cleanup this peer connection.
+
+If the optional `err` parameter is passed, then it will be emitted as an `'error'`
+event on the stream.
+
+### `SimplePeer.WEBRTC_SUPPORT`
+
+Detect native WebRTC support in the javascript environment.
+
+```cs
+if (SimplePeer.WEBRTC_SUPPORT) {
+  // webrtc support!
+} else {
+  // fallback
+}
+```
+
+## Events
+
+**Note:** Registered event handlers need to be unregistered when they are no longer needed to prevent memory leaks. Lambda event handlers are used here to keep the examples simple.
+
+`SimplePeer` inherits from `EventEmitter`. Event handlers can be added using `JSEventCallback` and `+=/-=` operators or using `EventEmitter.On` and `EventEmitter.RemoveListener` methods.
+
+### `peer.OnSignal += (JSObject data) => {}`
+
+Fired when the peer wants to send signaling data to the remote peer.
+
+**It is the responsibility of the application developer (that's you!) to get this data to
+the other peer.** This usually entails using a websocket signaling server. This data is an
+`Object`, so  remember to call `JSON.Stringify(data)` to serialize it first. Then, simply
+call `peer.Signal(data)` on the remote peer.
+
+(Be sure to listen to this event immediately to avoid missing it. For `Initiator = true`
+peers, it fires right away. For `Initiator = false` peers, it fires when the remote
+offer is received.)
+
+### `peer.OnConnect += () => {}`
+
+Fired when the peer connection and data channel are ready to use.
+
+### `peer.OnData += (NodeBuffer data) => {}`
+
+Received a message from the remote peer (via the data channel). 
+
+For `ObjectMode = false` peers (default) `data` is a `NodeBuffer`. For `ObjectMode = true`
+peers, `data` can be a `string` or a `NodeBuffer`.
+
+### `peer.OnStream += (MediaStream stream) => {}`
+
+Received a remote video stream, which can be displayed in a video tag:
+
+```cs
+peer.OnStream += stream => {
+    using var document = JS.Get<Document>("document");
+    using var video = document.QuerySelector<HTMLVideoElement>("video");
+    video.SrcObject = stream;
+    video.Play();
+};
+```
+
+### `peer.OnTrack += (MediaStreamTrack track, MediaStream stream) => {}`
+
+Received a remote audio/video track. Streams may contain multiple tracks.
+
+### `peer.OnClose += () => {}`
+
+Called when the peer connection has closed.
+
+### `peer.OnError += (NodeError err) => {}`
+
+Fired when a fatal error occurs. Usually, this means bad signaling data was received from the remote peer.
+
+`err` is a `NodeError` object.
+
+## error codes
+
+Errors returned by the `error` event have an `err.Code` property that will indicate the origin of the failure. Constants for these errors can be found in the class `SimplePeer.ErrorCodes`.
+
+Possible error codes:
+- `ERR_WEBRTC_SUPPORT`
+- `ERR_CREATE_OFFER`
+- `ERR_CREATE_ANSWER`
+- `ERR_SET_LOCAL_DESCRIPTION`
+- `ERR_SET_REMOTE_DESCRIPTION`
+- `ERR_ADD_ICE_CANDIDATE`
+- `ERR_ICE_CONNECTION_FAILURE`
+- `ERR_SIGNALING`
+- `ERR_DATA_CHANNEL`
+- `ERR_CONNECTION_FAILURE`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

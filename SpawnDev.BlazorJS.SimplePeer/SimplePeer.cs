@@ -5,46 +5,15 @@ using SpawnDev.BlazorJS.JSObjects.WebRTC;
 namespace SpawnDev.BlazorJS.SimplePeer
 {
     /// <summary>
-    /// Duplex streams are streams that implement both the Readable and Writable interfaces.<br/>
-    /// https://nodejs.org/api/stream.html#class-streamduplex<br/>
-    /// https://nodejs.org/api/stream.html#class-streamreadable<br/>
-    /// https://nodejs.org/api/stream.html#class-streamwritable
-    /// </summary>
-    public class Duplex : EventEmitter
-    {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
-        public Duplex(IJSInProcessObjectReference _ref) : base(_ref) { }
-
-        /// <summary>
-        /// If false then the stream will automatically end the writable side when the readable side ends. Set initially by the allowHalfOpen constructor option, which defaults to true.
-        /// </summary>
-        public bool AllowHalfOpen => JSRef!.Get<bool>("allowHalfOpen");
-
-        #region Readable
-        /// <summary>
-        /// The 'close' event is emitted when the stream and any of its underlying resources (a file descriptor, for example) have been closed. The event indicates that no more events will be emitted, and no further computation will occur.
-        /// </summary>
-        public JSEventCallback OnClose { get => new JSEventCallback("close", On, RemoveListener); set { } }
-        /// <summary>
-        /// chunk &lt;Buffer> | &lt;string> | &lt;any> The chunk of data. For streams that are not operating in object mode, the chunk will be either a string or Buffer. For streams that are in object mode, the chunk can be any JavaScript value other than null.<br/>
-        /// 
-        /// </summary>
-        public JSEventCallback<JSObject> OnData { get => new JSEventCallback<JSObject>("data", On, RemoveListener); set { } }
-        #endregion
-    }
-    /// <summary>
     /// Simple WebRTC video, voice, and data channels<br/>
     /// https://github.com/feross/simple-peer?tab=readme-ov-file#api
     /// </summary>
-    public class SimplePeer : EventEmitter
+    public class SimplePeer : Duplex
     {
         /// <summary>
         /// Errors returned by the error event have an err.code property that will indicate the origin of the failure.
         /// </summary>
-        public static class ErrCodes
+        public static class ErrorCodes
         {
             public const string ERR_WEBRTC_SUPPORT = "ERR_WEBRTC_SUPPORT";
             public const string ERR_CREATE_OFFER = "ERR_CREATE_OFFER";
@@ -125,25 +94,9 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// </summary>
         public Array<MediaStream> Streams => JSRef!.Get<Array<MediaStream>>("streams");
         /// <summary>
-        /// Is true if it is safe to call writable.write(), which means the stream has not been destroyed, errored, or ended.
-        /// </summary>
-        public bool Writable => JSRef!.Get<bool>("writable");
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Readable => JSRef!.Get<bool>("readable");
-        /// <summary>
-        /// If false then the stream will automatically end the writable side when the readable side ends. Set initially by the allowHalfOpen constructor option, which defaults to true.
-        /// </summary>
-        public bool AllowHalfOpen => JSRef!.Get<bool>("allowHalfOpen");
-        /// <summary>
         /// 
         /// </summary>
         public bool Destroying => JSRef!.Get<bool>("destroying");
-        /// <summary>
-        /// The instance has been destroyed
-        /// </summary>
-        public bool Destroyed => JSRef!.Get<bool>("destroyed");
         /// <summary>
         /// 
         /// </summary>
@@ -154,10 +107,6 @@ namespace SpawnDev.BlazorJS.SimplePeer
         public int IceCompleteTimeout => JSRef!.Get<int>("iceCompleteTimeout");
         #endregion
         #region Methods
-        /// <summary>
-        /// Destroy and cleanup this peer connection.<br/>
-        /// </summary>
-        public void Destroy() => JSRef!.CallVoid("destroy");
         /// <summary>
         /// Call this method whenever the remote peer emits a peer.on('signal') event.<br/>
         /// The data will encapsulate a webrtc offer, answer, or ice candidate. These messages help the peers to eventually establish a direct connection to each other. The contents of these strings are an implementation detail that can be ignored by the user of this module; simply pass the data from 'signal' events to the remote peer and call peer.signal(data) to get connected.
@@ -232,7 +181,7 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// "video": the track is a video track.
         /// </param>
         /// <param name="init">An object for specifying any options when creating the new transceiver</param>
-        public void AddTransceiver(string kind, TransceiverRequestInit init) => JSRef!.CallVoid("addTransceiver", kind, init);
+        public void AddTransceiver(string kind, RTCRtpTransceiverOptions init) => JSRef!.CallVoid("addTransceiver", kind, init);
         #endregion
         #region Events
         /// <summary>
@@ -246,12 +195,6 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// </summary>
         public JSEventCallback OnConnect { get => new JSEventCallback("connect", On, RemoveListener); set { } }
         /// <summary>
-        /// Received a message from the remote peer (via the data channel).<br/>
-        /// data will be either a String or a NodeBuffer.<br/>
-        /// SimplePeerOptions.ObjectMode set to true to create the stream in Object Mode. In this mode, incoming string data is not automatically converted to NodeBuffer objects.
-        /// </summary>
-        public JSEventCallback<NodeBuffer> OnData { get => new JSEventCallback<NodeBuffer>("data", On, RemoveListener); set { } }
-        /// <summary>
         /// Received a remote video stream, which can be displayed in a video tag.
         /// </summary>
         public JSEventCallback<MediaStream> OnStream { get => new JSEventCallback<MediaStream>("stream", On, RemoveListener); set { } }
@@ -259,15 +202,6 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// Received a remote audio/video track. Streams may contain multiple tracks.
         /// </summary>
         public JSEventCallback<MediaStreamTrack, MediaStream> OnTrack{ get => new JSEventCallback<MediaStreamTrack, MediaStream>("track", On, RemoveListener); set { } }
-        /// <summary>
-        /// Called when the peer connection has closed.
-        /// </summary>
-        public JSEventCallback OnClose { get => new JSEventCallback("close", On, RemoveListener); set { } }
-        /// <summary>
-        /// Fired when a fatal error occurs. Usually, this means bad signaling data was received from the remote peer.<br/>
-        /// Errors returned by the error event have an err.code property that will indicate the origin of the failure.<br/>
-        /// </summary>
-        public JSEventCallback<NodeError> OnError { get => new JSEventCallback<NodeError>("error", On, RemoveListener); set { } }
         #endregion
     }
 }
