@@ -42,14 +42,6 @@
                 Initiator = initiator,
                 Trickle = false,
                 ObjectMode = false,
-                Config = new RTCConfiguration
-                {
-                    IceServers = new RTCIceServer[]
-                                            {
-                        new RTCIceServer { Urls = "stun:stun.l.google.com:19302" },
-                        new RTCIceServer { Urls = "stun:global.stun.twilio.com:3478" },
-                                            }
-                }
             };
         peer = new SimplePeer(peerOptions);
         peer.OnError += SimplePeer_OnError;
@@ -101,7 +93,7 @@
         outgoing = error.Code! + "<br/>";
         StateHasChanged();
     }
-    
+
     void SimplePeer_OnData(NodeBuffer data)
     {
         var dataType = data.JSRef!.GetConstructorName();
