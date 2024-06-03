@@ -18,7 +18,7 @@
 		<PackageIcon>icon-128.png</PackageIcon>
 		<RepositoryUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.SimplePeer.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Blazor;SimplePeer;WebRTC</PackageTags>
+		<PackageTags>Blazor;BlazorWebAssembly;SimplePeer;WebRTC</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
