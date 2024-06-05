@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\SpawnDev.BlazorJS.SimplePeer.WebPeer\SpawnDev.BlazorJS.SimplePeer.WebPeer.csproj" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS.SimplePeer\SpawnDev.BlazorJS.SimplePeer.csproj" />
 	</ItemGroup>
 

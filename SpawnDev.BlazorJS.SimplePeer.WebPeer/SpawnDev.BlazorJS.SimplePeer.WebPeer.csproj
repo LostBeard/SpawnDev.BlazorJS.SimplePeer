@@ -4,14 +4,14 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>1.0.2</Version>
+		<Version>1.0.1</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
 		<DebugType>Embedded</DebugType>
-		<Title>SpawnDev.BlazorJS.SimplePeer</Title>
+		<Title>SpawnDev.BlazorJS.SimplePeer.WebPeer</Title>
 		<Authors>LostBeard</Authors>
-		<Description>SimplePeer WebRTC video, voice, and data channels for Blazor WebAssembly</Description>
+		<Description>SimplePeer WebRTC video, voice, and data channels for Blazor WebAssembly. SimplePeer.WebPeer adds .Net method invoking abilities using SimplePeer connections.</Description>
 		<PackageProjectUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.SimplePeer</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -27,10 +27,6 @@
 		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.106" />
-	</ItemGroup>
-
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.25" />
 	</ItemGroup>
@@ -44,7 +40,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\SpawnDev.BlazorJS.SimplePeer\SpawnDev.BlazorJS.SimplePeer.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="SpawnDev.BlazorJS.MessagePack" Version="1.0.1" />
 	</ItemGroup>
 
 </Project>

@@ -15,7 +15,7 @@
     hit submit. <a href="https://github.com/feross/simple-peer?tab=readme-ov-file#usage">Original Example</a>
 </p>
 <br />
-<a href target="_blank">Open in new window</a>
+<a href="@($"{new Uri(NavigationManager.Uri).GetLeftPart(UriPartial.Path)}")" target="_blank">Open in new window</a>
 <br />
 
 <div>
@@ -31,6 +31,7 @@
 <pre style="width: 600px; word-wrap: break-word; white-space: normal;">@((MarkupString)outgoing)</pre>
 
 @code {
+    [Inject] NavigationManager NavigationManager { get; set; }
     [Inject] BlazorJSRuntime JS { get; set; }
 
     string peerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
