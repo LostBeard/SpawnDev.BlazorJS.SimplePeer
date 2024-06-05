@@ -1,6 +1,6 @@
 # SpawnDev.BlazorJS.SimplePeer
 
-[![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.SimplePeer.svg?label=SpawnDev.BlazorJS.SimplePeer)](https://www.nuget.org/packages/SpawnDev.BlazorJS.SimplePeer)
+[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.SimplePeer.svg?label=SpawnDev.BlazorJS.SimplePeer)](https://www.nuget.org/packages/SpawnDev.BlazorJS.SimplePeer) 
 
 **SpawnDev.BlazorJS.SimplePeer** brings the amazing [simple-peer](https://github.com/feross/simple-peer) library to Blazor WebAssembly.
 
@@ -325,6 +325,9 @@ Possible error codes:
 - `ERR_DATA_CHANNEL`
 - `ERR_CONNECTION_FAILURE`
 
+## SpawnDev.BlazorJS.SimplePeer.WebPeer  
+
+[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.SimplePeer.WebPeer.svg?label=SpawnDev.BlazorJS.SimplePeer.WebPeer)](https://www.nuget.org/packages/SpawnDev.BlazorJS.SimplePeer.WebPeer) 
 
 
 

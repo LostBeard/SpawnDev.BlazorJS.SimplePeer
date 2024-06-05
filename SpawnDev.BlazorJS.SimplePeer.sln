@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.SimplePee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.SimplePeer.Demo", "SpawnDev.BlazorJS.SimplePeer.Demo\SpawnDev.BlazorJS.SimplePeer.Demo.csproj", "{DEFCA8EE-8257-4411-83F4-CF419D85BEA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpawnDev.BlazorJS.SimplePeer.WebPeer", "SpawnDev.BlazorJS.SimplePeer.WebPeer\SpawnDev.BlazorJS.SimplePeer.WebPeer.csproj", "{07A8A088-828B-416A-A79D-A2D4FC4B6D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.SimplePeer.WebPeer", "SpawnDev.BlazorJS.SimplePeer.WebPeer\SpawnDev.BlazorJS.SimplePeer.WebPeer.csproj", "{07A8A088-828B-416A-A79D-A2D4FC4B6D61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
