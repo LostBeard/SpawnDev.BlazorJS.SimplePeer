@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
     /// <summary>
     /// Client and server implementation for remotely calling .Net methods using SimplePeer
     /// </summary>
-    public class WebPeer : AsyncCallDispatcher, IDisposable
+    public class WebPeer : AsyncCallDispatcherSlim, IDisposable
     {
         private BlazorJSRuntime JS;
         private IServiceScope ServiceProviderScope;
@@ -55,7 +55,7 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
             ScopedServiceProvider = ServiceProviderScope.ServiceProvider;
             InitDataConnection(dataConnection);
         }
-        public override async Task<object?> Call(MethodInfo methodInfo, object?[]? args = null)
+        protected override async Task<object?> DispatchCallAsync(MethodInfo methodInfo, object?[]? args = null)
         {
             if (Connection == null || !Connection.Writable) throw new Exception("Not connected");
             object? retValue = null;
@@ -324,7 +324,7 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
         }
         private void DataConnection_OnData(Uint8Array data)
         {
-            var msg = MessagePack.MessagePack.Decode<Array>(data.JSRefMove<Uint8Array>());
+            var msg = MessagePack.MessagePack.Decode<Array>(data);
             if (msg != null && Array.IsArray(msg) && msg.Length > 0)
             {
                 try
