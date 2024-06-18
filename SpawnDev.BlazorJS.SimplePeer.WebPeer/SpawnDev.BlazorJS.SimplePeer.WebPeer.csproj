@@ -27,6 +27,10 @@
 		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="SpawnDev.BlazorJS.MessagePack" Version="1.1.1" />
+	</ItemGroup>
+
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.25" />
 	</ItemGroup>
@@ -40,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SpawnDev.BlazorJS.SimplePeer\SpawnDev.BlazorJS.SimplePeer.csproj" />
+		<ProjectReference Include="..\SpawnDev.BlazorJS.SimplePeer\SpawnDev.BlazorJS.SimplePeer.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,12 +52,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\" />
+		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="SpawnDev.BlazorJS.MessagePack" Version="1.1.0" />
-	</ItemGroup>
 
 </Project>
 

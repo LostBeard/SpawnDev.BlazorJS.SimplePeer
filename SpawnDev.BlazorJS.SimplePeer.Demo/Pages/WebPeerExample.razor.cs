@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.Reflection;
 using SpawnDev.BlazorJS.SimplePeer.WebPeer;
 
 namespace SpawnDev.BlazorJS.SimplePeer.Demo.Pages
@@ -18,15 +19,9 @@ namespace SpawnDev.BlazorJS.SimplePeer.Demo.Pages
 
         void Init(bool initiator)
         {
-            var peerOptions = new SimplePeerOptions
-            {
-                Initiator = initiator,
-                Trickle = false,
-                ObjectMode = false,
-            };
-            webPeer = new WebPeer.WebPeer(ServiceProvider, new SimplePeer(peerOptions));
+            webPeer = new WebPeer.WebPeer(ServiceProvider, initiator);
+            webPeer.OnSignal += SimplePeer_OnSignal;
             webPeer.Connection!.OnError += SimplePeer_OnError;
-            webPeer.Connection.OnSignal += SimplePeer_OnSignal;
             webPeer.Connection.OnConnect += SimplePeer_OnConnect;
             webPeer.Connection.OnClose += SimplePeer_OnClose;
 
@@ -36,7 +31,7 @@ namespace SpawnDev.BlazorJS.SimplePeer.Demo.Pages
 
         void Submit()
         {
-            webPeer!.Connection!.Signal(JSON.Parse(incoming)!);
+            webPeer!.Signal(incoming);
         }
 
         async Task CallMethodTest()
@@ -61,8 +56,8 @@ namespace SpawnDev.BlazorJS.SimplePeer.Demo.Pages
 
         static long logId = 0;
 
-        [PeerCallable]
-        static long ConsoleLog(string msg, [CallSide] WebPeer.WebPeer? peer = null)
+        [RemoteCallable]
+        static long ConsoleLog(string msg, [FromLocal] WebPeer.WebPeer? peer = null)
         {
             InstanceConsoleLog?.Invoke($"ConsoleLog: {logId} {msg}");
             return logId++;
@@ -84,10 +79,9 @@ namespace SpawnDev.BlazorJS.SimplePeer.Demo.Pages
             StateHasChanged();
         }
 
-        void SimplePeer_OnSignal(JSObject data)
+        void SimplePeer_OnSignal(WebPeer.WebPeer webPeer,string signalJson)
         {
-            JS.Log("SIGNAL", JSON.Stringify(data));
-            outgoing = JSON.Stringify(data);
+            outgoing = signalJson;
             StateHasChanged();
         }
 
@@ -102,7 +96,7 @@ namespace SpawnDev.BlazorJS.SimplePeer.Demo.Pages
             if (webPeer != null)
             {
                 webPeer.Connection.OnError -= SimplePeer_OnError;
-                webPeer.Connection.OnSignal -= SimplePeer_OnSignal;
+                webPeer.OnSignal -= SimplePeer_OnSignal;
                 webPeer.Connection.OnConnect -= SimplePeer_OnConnect;
                 webPeer.Connection.OnClose -= SimplePeer_OnClose;
                 webPeer.Dispose();
