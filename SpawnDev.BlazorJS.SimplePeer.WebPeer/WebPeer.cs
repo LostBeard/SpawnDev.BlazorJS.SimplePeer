@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SpawnDev.BlazorJS.JSObjects;
+﻿using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using SpawnDev.BlazorJS.Reflection;
-using System.Reflection;
 using Array = SpawnDev.BlazorJS.JSObjects.Array;
 
 namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
@@ -12,7 +10,13 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
     /// </summary>
     public class WebPeer : RemoteDispatcher, IDisposable
     {
+        /// <summary>
+        /// Invoked when SimplePeer.OnClose event fires
+        /// </summary>
         public event Action<WebPeer> OnClose;
+        /// <summary>
+        /// Invoked when the SimplePeer has a signal to send to the remote SimplePeer via a signaler
+        /// </summary>
         public event Action<WebPeer, string> OnSignal;
         /// <summary>
         /// Passes the signal message from the signaler interface to SimplePeer
@@ -55,16 +59,15 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
             if (IsDisposed) return;
             if (Connection != null)
             {
-                Connection.OnSignal -= DataConnection_OnSignal;
-                Connection.OnConnect -= DataConnection_OnOpen;
-                Connection.OnClose -= DataConnection_OnClose;
-                Connection.OnError -= DataConnection_OnError;
+                Connection.OnSignal -= SimplePeer_OnSignal;
+                Connection.OnConnect -= SimplePeer_OnConnect;
+                Connection.OnClose -= SimplePeer_OnClose;
                 Connection.RemoveListener<Uint8Array>("data", DataConnection_OnData);
                 Connection.Dispose();
             }
             base.Dispose();
         }
-        private void DataConnection_OnSignal(JSObject data)
+        private void SimplePeer_OnSignal(JSObject data)
         {
             var signalJson = JSON.Stringify(data);
             OnSignal?.Invoke(this, signalJson);
@@ -73,10 +76,9 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
         private void InitDataConnection(SimplePeer dataConnection)
         {
             Connection = dataConnection;
-            Connection.OnSignal += DataConnection_OnSignal;
-            Connection.OnConnect += DataConnection_OnOpen;
-            Connection.OnClose += DataConnection_OnClose;
-            Connection.OnError += DataConnection_OnError;
+            Connection.OnSignal += SimplePeer_OnSignal;
+            Connection.OnConnect += SimplePeer_OnConnect;
+            Connection.OnClose += SimplePeer_OnClose;
             Connection.On<Uint8Array>("data", DataConnection_OnData);
         }
         private void Send(object?[] args)
@@ -90,30 +92,14 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
             data.Dispose();
             _ = HandleCall(msg);
         }
-        private void DataConnection_OnOpen()
+        private void SimplePeer_OnConnect()
         {
             SendReadyFlag();
         }
-        private void DataConnection_OnClose()
+        private void SimplePeer_OnClose()
         {
             ResetWhenReady();
             OnClose?.Invoke(this);
-        }
-        private void DataConnection_OnError(NodeError error)
-        {
-            //Log($"DataConnection_OnError: {error.Type}");
-        }
-        protected override Task<string?> CanCallCheck(MethodInfo methodInfo, RemoteCallableAttribute? remoteCallableAttr, ServiceDescriptor? info, object? instance)
-        {
-            return base.CanCallCheck(methodInfo, remoteCallableAttr, info, instance);
-        }
-        protected override Task<string?> PreCallCheck(MethodInfo methodInfo, object?[]? args = null)
-        {
-            return base.PreCallCheck(methodInfo, args);
-        }
-        protected override Task<object?> ResolveLocalInstance(Type parameterType)
-        {
-            return base.ResolveLocalInstance(parameterType);
         }
         protected override void SendCall(object?[] args) => Send(args);
     }
