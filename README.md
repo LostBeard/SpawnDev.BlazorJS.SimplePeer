@@ -19,7 +19,6 @@ Example Program.cs
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SpawnDev.BlazorJS;
-using SpawnDev.BlazorJS.MessagePack;
 using SpawnDev.BlazorJS.SimplePeer;
 using SpawnDev.BlazorJS.SimplePeer.Demo;
 
