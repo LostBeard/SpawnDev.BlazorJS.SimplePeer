@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using SpawnDev.BlazorJS.JSObjects;
-using SpawnDev.BlazorJS.Reflection;
-using SpawnDev.BlazorJS.SimplePeer.WebPeer;
+using SpawnDev.BlazorJS.WebWorkers;
 
 namespace SpawnDev.BlazorJS.SimplePeer.Demo.Pages
 {

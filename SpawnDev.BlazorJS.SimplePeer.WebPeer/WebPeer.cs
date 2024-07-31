@@ -1,6 +1,6 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
-using SpawnDev.BlazorJS.Reflection;
+using SpawnDev.BlazorJS.WebWorkers;
 using Array = SpawnDev.BlazorJS.JSObjects.Array;
 
 namespace SpawnDev.BlazorJS.SimplePeer.WebPeer

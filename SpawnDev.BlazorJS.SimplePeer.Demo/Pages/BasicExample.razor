@@ -100,7 +100,7 @@
 
     void SimplePeer_OnData(NodeBuffer data)
     {
-        var dataType = data.JSRef!.GetConstructorName();
+        var dataType = data.JSRef!.ConstructorName();
         JS.Log($"data type: {dataType}");
         switch (dataType)
         {
