@@ -13,6 +13,6 @@ builder.Services.AddBlazorJSRuntime();
 // Load the SimplePeer Javascript library. Can be called in a component instead if desired, or loaded using a <script> tag in the index.html
 await SimplePeer.Init();
 // MessagePack is used for the WebPeer demo
-await MessagePack.Init();
+await MessagePackSerializer.Init();
 // Run app using BlazorJSRunAsync extension method
 await builder.Build().BlazorJSRunAsync();

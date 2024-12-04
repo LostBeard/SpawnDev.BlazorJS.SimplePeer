@@ -1,5 +1,6 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
+using SpawnDev.BlazorJS.MessagePack;
 using SpawnDev.BlazorJS.WebWorkers;
 using Array = SpawnDev.BlazorJS.JSObjects.Array;
 
@@ -83,12 +84,12 @@ namespace SpawnDev.BlazorJS.SimplePeer.WebPeer
         }
         private void Send(object?[] args)
         {
-            using var uint8Array = MessagePack.MessagePack.Encode(args);
+            using var uint8Array = MessagePackSerializer.Encode(args);
             Connection!.Write(uint8Array);
         }
         private void DataConnection_OnData(Uint8Array data)
         {
-            var msg = MessagePack.MessagePack.Decode<Array>(data);
+            var msg = MessagePackSerializer.Decode<Array>(data);
             data.Dispose();
             _ = HandleCall(msg);
         }
