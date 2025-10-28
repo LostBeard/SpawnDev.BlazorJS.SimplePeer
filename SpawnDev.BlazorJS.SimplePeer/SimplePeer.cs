@@ -108,6 +108,10 @@ namespace SpawnDev.BlazorJS.SimplePeer
         #endregion
         #region Methods
         /// <summary>
+        /// 
+        /// </summary>
+        public void Negotiate() => JSRef!.CallVoid("negotiate");
+        /// <summary>
         /// Call this method whenever the remote peer emits a peer.on('signal') event.<br/>
         /// The data will encapsulate a webrtc offer, answer, or ice candidate. These messages help the peers to eventually establish a direct connection to each other. The contents of these strings are an implementation detail that can be ignored by the user of this module; simply pass the data from 'signal' events to the remote peer and call peer.signal(data) to get connected.
         /// </summary>
@@ -189,19 +193,19 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// It is the responsibility of the application developer (that's you!) to get this data to the other peer. This usually entails using a websocket signaling server. This data is an Object, so remember to call JSON.stringify(data) to serialize it first. Then, simply call peer.signal(data) on the remote peer.<br/>
         /// (Be sure to listen to this event immediately to avoid missing it. For initiator: true peers, it fires right away. For initatior: false peers, it fires when the remote offer is received.)
         /// </summary>
-        public JSEventCallback<JSObject> OnSignal { get => new JSEventCallback<JSObject>("signal", On, RemoveListener); set { } }
+        public ActionEvent<JSObject> OnSignal { get => new ActionEvent<JSObject>("signal", On, RemoveListener); set { } }
         /// <summary>
         /// Fired when the peer connection and data channel are ready to use.
         /// </summary>
-        public JSEventCallback OnConnect { get => new JSEventCallback("connect", On, RemoveListener); set { } }
+        public ActionEvent OnConnect { get => new ActionEvent("connect", On, RemoveListener); set { } }
         /// <summary>
         /// Received a remote video stream, which can be displayed in a video tag.
         /// </summary>
-        public JSEventCallback<MediaStream> OnStream { get => new JSEventCallback<MediaStream>("stream", On, RemoveListener); set { } }
+        public ActionEvent<MediaStream> OnStream { get => new ActionEvent<MediaStream>("stream", On, RemoveListener); set { } }
         /// <summary>
         /// Received a remote audio/video track. Streams may contain multiple tracks.
         /// </summary>
-        public JSEventCallback<MediaStreamTrack, MediaStream> OnTrack{ get => new JSEventCallback<MediaStreamTrack, MediaStream>("track", On, RemoveListener); set { } }
+        public ActionEvent<MediaStreamTrack, MediaStream> OnTrack{ get => new ActionEvent<MediaStreamTrack, MediaStream>("track", On, RemoveListener); set { } }
         #endregion
     }
 }

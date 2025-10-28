@@ -255,7 +255,7 @@ if (SimplePeer.WEBRTC_SUPPORT) {
 
 **Note:** Registered event handlers need to be unregistered (`-=` or `RemoveListener`) when they are no longer needed to prevent memory leaks. Lambda event handlers are used here to keep the examples simple.
 
-`SimplePeer` inherits from `EventEmitter`. Event handlers can be added using `JSEventCallback` and `+=/-=` operators or using `EventEmitter.On` and `EventEmitter.RemoveListener` methods.
+`SimplePeer` inherits from `EventEmitter`. Event handlers can be added using `ActionEvent` and `+=/-=` operators or using `EventEmitter.On` and `EventEmitter.RemoveListener` methods.
 
 ### `peer.OnSignal += (JSObject data) => {}`
 
@@ -324,9 +324,9 @@ Possible error codes:
 - `ERR_DATA_CHANNEL`
 - `ERR_CONNECTION_FAILURE`
 
-## SpawnDev.BlazorJS.SimplePeer.WebPeer  
+## SpawnDev.BlazorJS.SimplePeer.RallyPeer  
 
-[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.SimplePeer.WebPeer.svg?label=SpawnDev.BlazorJS.SimplePeer.WebPeer)](https://www.nuget.org/packages/SpawnDev.BlazorJS.SimplePeer.WebPeer) 
+[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.SimplePeer.RallyPeer.svg?label=SpawnDev.BlazorJS.SimplePeer.RallyPeer)](https://www.nuget.org/packages/SpawnDev.BlazorJS.SimplePeer.RallyPeer) 
 
 
 

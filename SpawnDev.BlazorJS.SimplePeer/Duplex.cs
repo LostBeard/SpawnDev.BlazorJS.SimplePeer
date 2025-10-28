@@ -43,11 +43,11 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// <summary>
         /// The 'error' event may be emitted by a Readable implementation at any time. Typically, this may occur if the underlying stream is unable to generate data due to an underlying internal failure, or when a stream implementation attempts to push an invalid chunk of data.
         /// </summary>
-        public JSEventCallback<NodeError> OnError { get => new JSEventCallback<NodeError>("error", On, RemoveListener); set { } }
+        public ActionEvent<NodeError> OnError { get => new ActionEvent<NodeError>("error", On, RemoveListener); set { } }
         /// <summary>
         /// The 'close' event is emitted when the stream and any of its underlying resources (a file descriptor, for example) have been closed. The event indicates that no more events will be emitted, and no further computation will occur.
         /// </summary>
-        public JSEventCallback OnClose { get => new JSEventCallback("close", On, RemoveListener); set { } }
+        public ActionEvent OnClose { get => new ActionEvent("close", On, RemoveListener); set { } }
         #region Writable
         /// <summary>
         /// Is true if it is safe to call writable.write(), which means the stream has not been destroyed, errored, or ended.
@@ -155,11 +155,11 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// <summary>
         /// If a call to stream.write(chunk) returns false, the 'drain' event will be emitted when it is appropriate to resume writing data to the stream.
         /// </summary>
-        public JSEventCallback OnDrain { get => new JSEventCallback("drain", On, RemoveListener); set { } }
+        public ActionEvent OnDrain { get => new ActionEvent("drain", On, RemoveListener); set { } }
         /// <summary>
         /// The 'finish' event is emitted after the stream.end() method has been called, and all data has been flushed to the underlying system.
         /// </summary>
-        public JSEventCallback OnFinish { get => new JSEventCallback("finish", On, RemoveListener); set { } }
+        public ActionEvent OnFinish { get => new ActionEvent("finish", On, RemoveListener); set { } }
         #endregion
 
         #region Readable
@@ -248,16 +248,16 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// Attaching a 'data' event listener to a stream that has not been explicitly paused will switch the stream into flowing mode. Data will then be passed as soon as it is available.<br/>
         /// The listener callback will be passed the chunk of data as a string if a default encoding has been specified for the stream using the readable.setEncoding() method; otherwise the data will be passed as a Buffer.
         /// </summary>
-        public JSEventCallback<NodeBuffer> OnData { get => new JSEventCallback<NodeBuffer>("data", On, RemoveListener); set { } }
+        public ActionEvent<NodeBuffer> OnData { get => new ActionEvent<NodeBuffer>("data", On, RemoveListener); set { } }
         /// <summary>
         /// The 'end' event is emitted when there is no more data to be consumed from the stream.<br/>
         /// The 'end' event will not be emitted unless the data is completely consumed. This can be accomplished by switching the stream into flowing mode, or by calling stream.read() repeatedly until all data has been consumed.
         /// </summary>
-        public JSEventCallback OnEnd { get => new JSEventCallback("end", On, RemoveListener); set { } }
+        public ActionEvent OnEnd { get => new ActionEvent("end", On, RemoveListener); set { } }
         /// <summary>
         /// The 'pause' event is emitted when stream.pause() is called and readableFlowing is not false.
         /// </summary>
-        public JSEventCallback OnPause { get => new JSEventCallback("pause", On, RemoveListener); set { } }
+        public ActionEvent OnPause { get => new ActionEvent("pause", On, RemoveListener); set { } }
         /// <summary>
         /// The 'readable' event is emitted when there is data available to be read from the stream or when the end of the stream has been reached. Effectively, the 'readable' event indicates that the stream has new information. If data is available, stream.read() will return that data.<br/>
         /// If the end of the stream has been reached, calling stream.read() will return null and trigger the 'end' event. This is also true if there never was any data to be read. For instance, in the following example, foo.txt is an empty file:<br/>
@@ -265,11 +265,11 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// In general, the readable.pipe() and 'data' event mechanisms are easier to understand than the 'readable' event. However, handling 'readable' might result in increased throughput.<br/>
         /// If both 'readable' and 'data' are used at the same time, 'readable' takes precedence in controlling the flow, i.e. 'data' will be emitted only when stream.read() is called. The readableFlowing property would become false. If there are 'data' listeners when 'readable' is removed, the stream will start flowing, i.e. 'data' events will be emitted without calling .resume().
         /// </summary>
-        public JSEventCallback OnReadable { get => new JSEventCallback("readable", On, RemoveListener); set { } }
+        public ActionEvent OnReadable { get => new ActionEvent("readable", On, RemoveListener); set { } }
         /// <summary>
         /// The 'resume' event is emitted when stream.resume() is called and readableFlowing is not true.
         /// </summary>
-        public JSEventCallback OnResume { get => new JSEventCallback("resume", On, RemoveListener); set { } }
+        public ActionEvent OnResume { get => new ActionEvent("resume", On, RemoveListener); set { } }
         #endregion
     }
 }

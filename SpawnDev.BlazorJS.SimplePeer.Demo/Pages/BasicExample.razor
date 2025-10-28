@@ -31,8 +31,8 @@
 <pre style="width: 600px; word-wrap: break-word; white-space: normal;">@((MarkupString)outgoing)</pre>
 
 @code {
-    [Inject] NavigationManager NavigationManager { get; set; }
-    [Inject] BlazorJSRuntime JS { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] BlazorJSRuntime JS { get; set; } = default!;
 
     string peerRole => peer == null ? "(select)" : (peer.Initiator ? "initiator" : "receiver");
     SimplePeer? peer = null;
