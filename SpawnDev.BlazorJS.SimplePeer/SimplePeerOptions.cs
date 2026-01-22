@@ -49,7 +49,7 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// If video/voice is desired, pass stream returned from getUserMedia
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public MediaStream? Stream{ get; set; }
+        public MediaStream? Stream { get; set; }
         /// <summary>
         /// An array of MediaStreams returned from getUserMedia
         /// </summary>

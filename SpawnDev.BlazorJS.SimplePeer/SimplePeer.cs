@@ -205,7 +205,7 @@ namespace SpawnDev.BlazorJS.SimplePeer
         /// <summary>
         /// Received a remote audio/video track. Streams may contain multiple tracks.
         /// </summary>
-        public ActionEvent<MediaStreamTrack, MediaStream> OnTrack{ get => new ActionEvent<MediaStreamTrack, MediaStream>("track", On, RemoveListener); set { } }
+        public ActionEvent<MediaStreamTrack, MediaStream> OnTrack { get => new ActionEvent<MediaStreamTrack, MediaStream>("track", On, RemoveListener); set { } }
         #endregion
     }
 }
